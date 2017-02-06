@@ -3,3 +3,4 @@
 /node-web-server/node_modules
 /node-tests/node_modules
 /node-tests/*.log
+/node-todo-api/node_modules
