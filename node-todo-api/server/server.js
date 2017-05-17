@@ -1,20 +1,30 @@
-var mongoose = require('mongoose');
+var express = require('express');
+var bodyParser = require('body-parser');
 
-// Usar a biblioteca padrão de promises
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+var {mongoose} = require('./db/mongoose.js');
+var {Todo} = require('./models/todo');
+var {User} = require('./models/user');
 
-var Todo = mongoose.model('Todo', {
-  text: {
-    type: String
-  },
-  completed: {
-    type: Boolean
-  },
-  completedAt: {
-    type: Number
-  }
+var app = express();
+
+app.use(bodyParser.json());
+
+app.post('/todos', (req, res) => {
+  var todo = new Todo({
+    text: req.body.text
+  });
+
+  todo.save().then((doc) => {
+    res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  });
 });
+
+app.listen(3000, () => {
+  console.log('Started on port 3000');
+});
+
 
 // var newTodo = new Todo({
 //   text: 'Another task',
@@ -28,15 +38,25 @@ var Todo = mongoose.model('Todo', {
 //   console.log(e);
 // });
 
-
-var secondTodo = new Todo({
-  text: 'Cook dinner',
-  completed: true,
-  completedAt: 123
-});
-
-secondTodo.save().then((doc) => {
-  console.log('Saved', doc);
-}).catch((e) => {
-  console.log('Unable to save', e);
-});
+// var secondTodo = new Todo({
+//   text: '   Nova tarefa    '
+// });
+//
+// secondTodo.save().then((doc) => {
+//   console.log('Saved', doc);
+// }).catch((e) => {
+//   console.log('Unable to save', e);
+// });
+//
+//
+//
+//
+// var diego = new User({
+//   email: ' email@teste.com '
+// });
+//
+// diego.save().then((doc) => {
+//   console.log(doc);
+// }).catch((e) => {
+//   console.log(e);
+// });
